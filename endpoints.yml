@@ -1,0 +1,20 @@
+
+action_endpoint:
+  url: "http://localhost:5055/webhook"
+
+tracker_store:
+  type: SQL
+  dialect: "sqlite"
+  db: "tracker.db"
+
+model_groups:
+  - id: enterprise_search_generation
+    models:
+      - provider: "openai"
+        model: "gpt-4o-mini-2024-07-18"
+  - id: enterprise_search_embeddings
+    models:
+      - provider: "openai"
+        model: "text-embedding-ada-002"
+
+        

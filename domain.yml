@@ -1,0 +1,152 @@
+version: "3.1"
+
+intents:
+  - greet
+  - goodbye
+  - express_anxiety
+  - express_depression
+  - crisis_situation
+  - ask_for_diagnosis
+  - ask_for_medication_advice
+  - need_support
+  - nlu_fallback
+  - called_support
+  - accept_support
+  - refused_support
+  - start_somatic_breathing
+  - affirm
+  - deny
+  - done
+
+entities:
+  - emotion
+  - physical_symptom
+  - condition
+  - request
+  - emergency
+  - medication
+
+responses:
+  utter_greet:
+    - text: "Hello, I'm here for you. How are you feeling today?"
+    - text: "Welcome — I'm glad you reached out. How can I support you today?"
+
+  utter_goodbye:
+    - text: "Take care. I'm here whenever you need me."
+    - text: "Goodbye for now. Remember, you’re not alone."
+    - text: "I’ll be here when you’re ready to talk again."
+
+  utter_crisis_response:
+    - text: |
+        I'm really sorry you're going through this. You're not alone, and there is help available.
+        Please consider calling a mental health crisis line or reaching out to a support professional immediately.
+        Would you like me to share some crisis helpline numbers with you?
+        
+  utter_crisis_checkin:
+    - text: "I'm here with you. Would you like me to share some support options or talk more about what's been going on?"
+
+  utter_crisis_resources:
+    - text: |
+        Here are some resources you can reach out to right away:
+        📞 Samaritans (UK): 116 123  
+        📞 Lifeline (US): 1-800-273-TALK (8255)  
+        📞 Crisis Text Line: Text HOME to 741741
+
+  utter_crisis_followup:
+    - text: "That’s really good to hear. I'm glad you took that step. You're not alone in this."
+
+  utter_crisis_respect_choice:
+    - text: "That's completely okay. Just remember, support is always here when you're ready."
+
+  utter_no_diagnosis:
+    - text: "I'm here to offer support, but I'm not a licensed therapist, so I can't diagnose you."
+    - text: "I can’t provide diagnoses or medical advice, but I’m here to listen and support you."
+    - text: "That's a really important question, but only a qualified mental health professional can give you a diagnosis."
+
+  utter_no_medication_advice:
+    - text: "I can’t provide medication or treatment advice. A licensed doctor or psychiatrist would be best to guide you on that."
+    - text: "That's an important question. For personalized advice about medication, please consult a healthcare provider."
+
+  utter_need_support:
+    - text: "You’re not alone in this. I'm here to listen and support you."
+    - text: "I’m really glad you reached out. What would you like to talk about?"
+    - text: "Let’s take this one step at a time — I’m here with you."
+
+  utter_default:
+    - text: "I'm here to support you, but I didn’t quite understand that. Could you rephrase it?"
+    - text: "Sorry, I didn’t catch that. Could you try asking another way?"
+
+  utter_called_support:
+    - text: "I'm really proud of you for taking that step. Reaching out takes strength."
+
+  utter_refused_support:
+    - text: "That’s okay. Just know that support is always available whenever you’re ready."
+
+  utter_offer_somatic_breathing:
+    - text: >
+        I'm really sorry you're feeling this way. It sounds like you're feeling very overwhelmed right now. 
+        Would you like to try a short somatic breathing exercise together to help you feel a little more grounded?
+      buttons:
+        - title: "Yes, let's try it"
+          payload: "/affirm"
+        - title: "No, not right now"
+          payload: "/deny"
+
+  utter_somatic_breathing:
+    - text: >
+        Ok great! Let's try a somatic breathing exercise together. Breathe in time with the shape for 2 minutes. 
+        This can help you relax and keep calm.
+      custom:
+        video: "http://localhost:8000/static/somatic_breathing_2min_fixed.mp4"
+        buttons:
+          - title: "Done"
+            payload: "/done"
+
+  utter_respect_no_breathing:
+    - text: >
+        That’s completely okay — everyone handles stress differently. 
+        We can explore more about what you're feeling if that’s alright with you.
+
+actions:
+  - action_openai_rag
+  - action_openai_behavioural_activation
+  - action_openai_cognitive_restructuring
+  - action_openai_mindfulness
+  - action_set_crisis_slot
+  - action_reset_crisis_slot
+  - action_set_breathing_slot
+  - action_openai_continue_intervention
+
+slots:
+  summary_context:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+
+  is_in_crisis:
+    type: bool
+    influence_conversation: true
+    initial_value: false
+    mappings:
+      - type: from_intent
+        intent: crisis_situation
+        value: true
+
+  is_in_breathing:
+    type: bool
+    influence_conversation: true
+    initial_value: false
+    mappings:
+      - type: custom
+
+  history:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_text
+
+
+user_emotion:
+    type: text
+    influence_conversation: false
