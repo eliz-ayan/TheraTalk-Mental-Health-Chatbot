@@ -1,0 +1,203 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - hi
+      - hello
+      - hey
+      - good morning
+      - good evening
+      - hi there
+      - hey there
+      - howdy
+      - heya
+      - yo
+      - greetings
+      - what's up
+      - hello there
+      - nice to meet you
+
+  - intent: goodbye
+    examples: |
+      - bye
+      - goodbye
+      - see you later
+      - talk to you soon
+      - catch you later
+      - take care
+      - have a good day
+      - I'm signing off
+      - see ya
+      - I’ll talk to you later
+      - I'm done for now
+
+  - intent: express_anxiety
+    examples: |
+      - I'm feeling [anxious](emotion)
+      - I have [anxiety](emotion)
+      - I’m having a [panic attack](physical_symptom)
+      - I feel [overwhelmed](emotion)
+      - I'm [nervous](emotion) all the time
+      - my [heart](physical_symptom) is racing
+      - I feel [restless](emotion)
+      - I feel like something [bad](emotion) is going to happen
+      - I feel on [edge](emotion)
+      - I'm struggling with [anxiety](emotion) again
+      - anxious thoughts are taking [over](emotion)
+      - I can't [relax](emotion)
+      - my [anxiety](emotion) is getting worse
+
+  - intent: express_depression
+    examples: |
+      - I feel [sad](emotion)
+      - I think I’m [depressed](emotion)
+      - I'm feeling [low](emotion)
+      - I have no [energy](physical_symptom)
+      - I can’t get out of [bed](physical_symptom)
+      - I feel [numb](emotion)
+      - I’m so [down](emotion) lately
+      - I don’t find [joy](emotion) in anything
+      - I just want to [sleep](physical_symptom) all day
+      - everything feels [pointless](emotion)
+      - I feel [empty](emotion) inside
+      - I’m losing [interest](emotion) in things I used to enjoy
+      - my [mood](emotion) is really low
+      - I feel [hopeless](emotion)
+      - I don’t care about anything [anymore](emotion)
+      - I [cry](physical_symptom) all the time
+      - I feel like a [failure](emotion)
+
+  - intent: crisis_situation
+    examples: |
+      - I want to kill myself
+      - I'm going to end it all
+      - I want to die
+      - I'm [suicidal](emotion)
+      - I want to hurt myself
+      - I'm planning to take my own life
+      - I think I’m a danger to myself
+      - I need [urgent](emergency) crisis help
+
+  - intent: ask_for_diagnosis
+    examples: |
+      - Can you diagnose me?
+      - Do you think I have [depression](condition)?
+      - What mental illness do I have?
+      - I think I might be [bipolar](condition)
+      - Could this be [anxiety](condition)?
+      - Am I [schizophrenic](condition)?
+      - Can you tell if I have a [disorder](condition)?
+      - Do I have [ADHD](condition)?
+      - What’s wrong with me mentally?
+      - Can you help me figure out what's wrong?
+      - Can you give me a [diagnosis](request)?
+      - Is this a [mental illness](condition)?
+      - Could I be clinically [depressed](condition)?
+      - Should I be on [medication](request)?
+      - Do you think I have [PTSD](condition)?
+      - Can you tell me if I have [OCD](condition)?
+      - Is this a sign of a [disorder](condition)?
+      - Do you think I’m [mentally ill](condition)?
+      - I want a mental health [diagnosis](request)
+      - Do you think I have a [condition](request)?
+
+  - intent: ask_for_medication_advice
+    examples: |
+      - Should I take [antidepressants](medication)?
+      - What [medication](medication) should I take for [anxiety](condition)?
+      - Can you prescribe me [something](medication)?
+      - Is there a [pill](medication) for this?
+      - What’s the best treatment for [PTSD](condition)?
+      - What [medication](medication) works best for [OCD](condition)?
+      - Do I need [meds](medication)?
+      - Should I try [Xanax](medication)?
+      - What kind of [medication](medication) helps with [panic attacks](physical_symptom)?
+      - Are there natural alternatives to [meds](medication)?
+      - Is therapy better than [medication](medication)?
+      - Will [medication](medication) help me feel better?
+      - What are the side effects of [antidepressants](medication)?
+
+  - intent: need_support
+    examples: |
+      - I just need someone to talk to
+      - I need [support](request)
+      - Can I talk to you?
+      - I'm struggling emotionally
+      - I need help [coping](request)
+      - I just need to vent
+      - I’m not okay
+      - I need [emotional support](request)
+      - I need [comfort](request)
+      - I just need a kind word right now
+      - I feel emotionally drained
+      - I don’t want to be alone right now
+      - I’m tired of pretending I’m fine
+      - I’m having a hard time
+      - I just want someone to understand
+
+  - intent: called_support
+    examples: |
+      - I called them
+      - I reached out
+      - I contacted support
+      - I spoke to someone
+      - Yes, I made the call
+      - I did call for help
+
+  - intent: refused_support
+    examples: |
+      - I don’t want help
+      - No, I didn’t call
+      - I didn’t reach out
+      - I don’t feel ready to talk
+      - No, not yet
+      - I’m not going to call
+
+  - intent: accept_support
+    examples: |
+      - yes please
+      - that would be great
+      - I would like that
+      - okay
+      - sure, I want the resources
+      - yes, I need help
+
+  - intent: start_somatic_breathing
+    examples: |
+      - I want to try breathing
+      - Help me calm down
+      - Can we do somatic breathing?
+      - I feel anxious, can we breathe?
+      - Guide me through a breathing exercise
+      - I'm feeling very panicked right now
+      - I can't breathe properly
+      - It feels like there’s a constant knot in my [chest](physical_symptom)
+
+  - intent: affirm
+    examples: |
+      - yes
+      - yeah
+      - okay
+      - sure
+      - absolutely
+      - definitely
+      - please
+      - of course
+
+  - intent: deny
+    examples: |
+      - no
+      - not really
+      - I'd rather not
+      - nope
+      - nah
+      - no thanks
+
+  - intent: done
+    examples: |
+      - I'm done
+      - finished
+      - that helped
+      - I completed it
+      - all done

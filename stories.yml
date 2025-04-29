@@ -1,0 +1,24 @@
+version: "3.1"
+
+stories:
+
+- story: user is feeling depressed
+  steps:
+    - intent: express_depression
+    - action: action_openai_behavioural_activation
+
+- story: user is feeling anxious
+  steps:
+    - intent: express_anxiety
+    - action: action_openai_cognitive_restructuring
+
+- story: user asks for a diagnosis
+  steps:
+    - intent: ask_for_diagnosis
+    - action: utter_no_diagnosis
+
+- story: user asks for medication advice
+  steps:
+    - intent: ask_for_medication_advice
+    - action: utter_no_medication_advice
+

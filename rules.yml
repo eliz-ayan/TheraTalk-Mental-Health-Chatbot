@@ -1,0 +1,98 @@
+version: "3.1"
+
+rules:
+
+
+- rule: Greet user
+  steps:
+    - intent: greet
+    - action: utter_greet
+
+- rule: Goodbye to user 
+  steps:
+    - intent: goodbye
+    - action: utter_goodbye
+
+- rule: Handle depression
+  steps:
+    - intent: depression
+    - action: action_openai_behavioural_activation
+
+- rule: Handle anxiety
+  steps:
+    - intent: anxiety
+    - action: action_openai_cognitive_restructuring
+
+- rule: Handle diagnosis questions safely
+  steps:
+    - intent: ask_for_diagnosis
+    - action: utter_no_diagnosis
+
+- rule: Handle medication advice questions safely
+  steps:
+    - intent: ask_for_medication_advice
+    - action: utter_no_medication_advice
+
+- rule: Handle need for emotional support
+  steps:
+    - intent: need_support
+    - action: utter_need_support
+
+
+- rule: Crisis intent sets slot and checks in
+  steps:
+    - intent: crisis_situation
+    - action: action_set_crisis_slot
+    - action: utter_crisis_checkin
+
+- rule: Affirm during crisis flow → show resources
+  condition:
+    - slot_was_set:
+        - is_in_crisis: true
+  steps:
+    - intent: accept_support
+    - action: utter_crisis_resources
+
+- rule: Called support → reset slot
+  steps:
+    - intent: called_support
+    - action: utter_crisis_followup
+    - action: action_reset_crisis_slot
+
+- rule: Declined support → reset slot
+  steps:
+    - intent: refused_support
+    - action: utter_crisis_respect_choice
+    - action: action_reset_crisis_slot
+
+
+- rule: NLU fallback
+  steps:
+    - intent: nlu_fallback
+    - action: action_openai_rag
+
+
+- rule: Offer somatic breathing
+  steps:
+    - intent: start_somatic_breathing
+    - action: action_set_breathing_slot  
+    - action: utter_offer_somatic_breathing
+
+- rule: User agrees to breathing
+  condition:
+    - slot_was_set:
+        - is_in_breathing: true
+  steps:
+    - intent: affirm
+    - action: utter_somatic_breathing
+
+- rule: User declines breathing
+  steps:
+    - intent: deny
+    - action: utter_respect_no_breathing
+
+- rule: Completed breathing
+  steps:
+    - intent: done
+    - action: action_openai_continue_intervention
+

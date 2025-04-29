@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TheraTalk Chat</title>
+  <style>
+    
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #eef7f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+    }
+
+    .chat-container {
+      width: 90%;
+      max-width: 600px;
+      background-color: white;
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .chat-header {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #1f3d47;
+      margin-bottom: 4px;
+    }
+
+    .chat-subtitle {
+      font-size: 0.95rem;
+      color: #6b7c86;
+      margin-bottom: 25px;
+    }
+
+    .chat-box {
+      max-height: 400px;
+      overflow-y: auto;
+      padding-right: 4px;
+      margin-bottom: 20px;
+    }
+
+    .message-wrapper {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 20px;
+      max-width: 75%;
+      word-wrap: break-word;
+    }
+
+    .message-wrapper.user {
+      align-self: flex-end;
+      align-items: flex-end;
+    }
+
+    .message-wrapper.bot {
+      align-self: flex-start;
+      align-items: flex-start;
+    }
+
+    .message {
+      background-color: #d5ebfb;
+      border-radius: 16px 16px 0 16px;
+      padding: 12px 16px;
+      color: #1f3d47;
+      display: inline-block;
+      max-width: 100%;
+    }
+
+    .message.bot {
+      background-color: #d1f3e2;
+      border-radius: 16px 16px 16px 0;
+    }
+
+    .meta-label {
+      font-size: 0.75rem;
+      color: #888;
+      margin-top: 4px;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px 14px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      font-size: 1rem;
+    }
+
+    button {
+      background-color: #30b88f;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      font-size: 1rem;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      margin-top: 5px;
+    }
+
+    button:hover {
+      background-color: #28a17d;
+    }
+
+    .input-meta {
+      text-align: right;
+      font-size: 0.7rem;
+      color: #aaa;
+      margin-top: 2px;
+      margin-right: 4px;
+    }
+
+    video {
+      border-radius: 12px;
+      margin-top: 10px;
+    }
+
+    #loginSection {
+      text-align: center;
+    }
+
+    #chatUI {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-container">
+
+  <div id="loginSection">
+    <h2>Welcome to TheraTalk</h2>
+    <p style="color: #6b7c86; font-size: 0.95rem; margin: 10px 0 20px;">
+      TheraTalk is a compassionate AI companion designed to support your mental well-being through conversation.
+    </p>
+    <p>Please enter your name to begin chatting:</p>   
+    <input type="text" id="usernameInput" placeholder="Your name" />
+    <button onclick="startChat()">Start Chat</button>
+  </div>
+
+  <div id="chatUI">
+    <div class="chat-header">TheraTalk</div>
+    <div class="chat-subtitle">A safe space to talk, reflect, and feel supported 💬</div>
+  
+    <div class="chat-box" id="chatBox"></div>
+  
+    <div class="input-area">
+      <input type="text" id="userInput" placeholder="Type your message here..." autofocus />
+      <button onclick="sendMessage()">Send</button>
+    </div>
+  </div>
+  
+<script>
+  let username = "";
+
+  const input = document.getElementById("userInput");
+  const chatBox = document.getElementById("chatBox");
+
+  input.addEventListener("keypress", function (e) {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  function startChat() {
+  username = document.getElementById("usernameInput").value.trim();
+  if (!username) return;
+
+  document.getElementById("loginSection").style.display = "none";
+  document.getElementById("chatUI").style.display = "block";
+
+  loadHistory();
+
+ 
+  fetch("http://localhost:5005/webhooks/rest/webhook", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      sender: username,
+      message: `/set_name{"name": "${username}"}`
+    })
+  });
+
+  appendToHistory("bot", "Hello, I'm glad you reached out. How are you feeling today?", new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
+  saveMessageToLocal("bot", "Hello, I'm glad you reached out. How are you feeling today?");
+}
+
+
+
+  function appendToHistory(sender, message, time) {
+    const wrap = document.createElement("div");
+    wrap.classList.add("message-wrapper", sender);
+    wrap.innerHTML = `
+    <div class="message ${sender === 'bot' ? 'bot' : ''}">${message}</div>`;
+    chatBox.appendChild(wrap);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function saveMessageToLocal(sender, message) {
+    const historyKey = `theratalk_history_${username}`;
+    const messages = JSON.parse(localStorage.getItem(historyKey)) || [];
+    messages.push({ sender, message, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+    localStorage.setItem(historyKey, JSON.stringify(messages));
+  }
+
+  function loadHistory() {
+    const historyKey = `theratalk_history_${username}`;
+    const messages = JSON.parse(localStorage.getItem(historyKey)) || [];
+    messages.forEach(({ sender, message, time }) => {
+      appendToHistory(sender, message, time);
+    });
+  }
+
+  async function sendMessage(payload = null) {
+    const message = payload || input.value.trim();
+    if (!message || !username) return;
+
+    appendToHistory("user", message, new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}));
+    saveMessageToLocal("user", message);
+    input.value = "";
+
+    const typingWrap = document.createElement("div");
+    typingWrap.classList.add("message-wrapper", "bot");
+    typingWrap.setAttribute("id", "typing");
+    typingWrap.innerHTML = `<div class="message bot">Typing...</div><div class="meta-label">TheraTalk</div>`;
+    chatBox.appendChild(typingWrap);
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    try {
+      const res = await fetch("http://localhost:5005/webhooks/rest/webhook", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ sender: username, message: message })
+      });
+
+      const data = await res.json();
+      document.getElementById("typing")?.remove();
+
+      data.forEach(response => {
+        let botMessage = "";
+
+        if (response.text) {
+          botMessage += `<div class="message bot">${response.text}</div>`;
+        }
+
+        if (response.custom?.video) {
+          botMessage += `
+            <div class="message bot">
+              <video width="100%" height="auto" controls>
+                <source src="${response.custom.video}" type="video/mp4">
+                Your browser does not support the video tag.
+              </video>
+            </div>`;
+        }
+
+        const buttons = response.custom?.buttons || response.buttons;
+        if (buttons) {
+          buttons.forEach(btn => {
+            botMessage += `<button onclick="sendMessage('${btn.payload}')">${btn.title}</button>`;
+          });
+        }
+
+        const botWrap = document.createElement("div");
+        botWrap.classList.add("message-wrapper", "bot");
+        botWrap.innerHTML = `
+          ${botMessage}
+          <div class="meta-label">TheraTalk • ${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+        `;
+        chatBox.appendChild(botWrap);
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        saveMessageToLocal("bot", response.text || "[non-text response]");
+      });
+
+    } catch (err) {
+      document.getElementById("typing")?.remove();
+      const errorWrap = document.createElement("div");
+      errorWrap.classList.add("message-wrapper", "bot");
+      errorWrap.innerHTML = `<div class="message bot">Sorry, there was an issue reaching TheraTalk.</div><div class="meta-label">TheraTalk</div>`;
+      chatBox.appendChild(errorWrap);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    }
+  }
+</script>
+
+</body>
+</html>

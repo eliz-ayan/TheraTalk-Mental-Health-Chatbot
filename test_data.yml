@@ -1,0 +1,100 @@
+version: "3.1"
+
+nlu:
+  - intent: greet
+    examples: |
+      - hey there
+      - good morning
+      - yo
+
+  - intent: goodbye
+    examples: |
+      - see ya
+      - I’m done for now
+      - talk to you soon
+
+  - intent: express_anxiety
+    examples: |
+      - I feel [restless](emotion)
+      - my [anxiety](emotion) is getting worse
+      - I can't [relax](emotion)
+      - I'm always [nervous](emotion), even when things are okay
+
+  - intent: express_depression
+    examples: |
+      - everything feels [pointless](emotion)
+      - I just want to [sleep](physical_symptom) all day
+      - I feel like a [failure](emotion)
+      - I’ve lost all [interest](emotion) in things
+
+  - intent: crisis_situation
+    examples: |
+      - I want to hurt myself
+      - I'm [suicidal](emotion)
+      - I need [urgent](emergency) crisis help
+      - I'm thinking of ending everything
+
+  - intent: ask_for_diagnosis
+    examples: |
+      - Do I have [ADHD](condition)?
+      - Can you give me a [diagnosis](request)?
+      - Should I be on [medication](request)?
+      - What if I have [PTSD](condition)?
+
+  - intent: ask_for_medication_advice
+    examples: |
+      - Should I take [antidepressants](medication)?
+      - Do I need [meds](medication)?
+      - Is therapy better than [medication](medication)?
+      - Can I get [Xanax](medication) for this?
+
+  - intent: need_support
+    examples: |
+      - I’m not okay
+      - I need [support](request)
+      - I just need to vent
+      - I really need [emotional support](request) right now
+
+  - intent: called_support
+    examples: |
+      - I reached out
+      - I did call for help
+      - I spoke to someone
+
+  - intent: refused_support
+    examples: |
+      - No, not yet
+      - I don’t feel ready to talk
+      - I’m not going to call
+
+  - intent: accept_support
+    examples: |
+      - yes please
+      - I would like that
+      - okay
+      - sure, I’ll take the help
+
+  - intent: start_somatic_breathing
+    examples: |
+      - Guide me through a breathing exercise
+      - I can't breathe properly
+      - I want to try breathing
+      - Can we do the calm breathing thing?
+
+  - intent: affirm
+    examples: |
+      - absolutely
+      - yes
+      - please
+
+  - intent: deny
+    examples: |
+      - nah
+      - I'd rather not
+      - no thanks
+
+  - intent: done
+    examples: |
+      - I completed it
+      - that helped
+      - all done
